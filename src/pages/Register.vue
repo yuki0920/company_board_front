@@ -15,6 +15,8 @@
 <script lang="ts">
 // イベントをリッスンするための関数
 import {ref} from 'vue'
+import axios from 'axios'
+
 export default {
   name: "Register",
   setup() {
@@ -24,8 +26,8 @@ export default {
     const password = ref('')
     const passwordConfirm = ref('')
 
-    const submit = () => {
-      console.log({
+    const submit = async () => {
+      const {data} = await axios.post('http://localhost:8000/api/register', {
         // firstNameはobject
         first_name: firstName.value,
         last_name: lastName.value,
@@ -33,6 +35,8 @@ export default {
         password: password.value,
         password_confirm: passwordConfirm.value,
       })
+
+      console.log(data)
     }
 
     return {
