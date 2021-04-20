@@ -29,7 +29,7 @@ export default {
     const router = useRouter()
 
     const submit = async () => {
-      await axios.post('http://localhost:8000/api/register', {
+      await axios.post('register', {
         // firstNameはobject
         first_name: firstName.value,
         last_name: lastName.value,
