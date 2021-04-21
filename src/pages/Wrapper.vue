@@ -16,6 +16,7 @@ import Nav from '@/components/Nav'
 import Menu from '@/components/Menu'
 import axios from 'axios'
 import {onMounted} from 'vue'
+import {useRouter} from 'vue-router'
 
 export default {
   name: "Wrapper",
@@ -24,9 +25,16 @@ export default {
     Menu
   },
   setup() {
+    const router = useRouter()
+
     onMounted(async() => {
-      const { data } = await axios.get('user')
-      console.log(data)
+      try {
+        const { data } = await axios.get('user')
+
+        console.log(data)
+      } catch (e) {
+        await router.push('login')
+      }
     })
   }
 }
