@@ -1,20 +1,31 @@
 <template>
-  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">会社名</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="検索" aria-label="検索">
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" href="#">サインアウト</a>
-      </li>
-    </ul>
-  </header>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <router-link to="/profile" class="p-2 text-white text-decoration-none">{{name}}</router-link>
+        <a class="p-2 text-white text-decoration-none" href="#">Sign out</a>
+    </nav>
+  </nav>
 </template>
 
-<script>
+<script lang="ts">
+import axios from 'axios'
+import {onMounted, ref} from 'vue'
+
 export default {
-  name: "Nav"
+  name: "Nav",
+  setup() {
+    const name = ref('')
+
+    onMounted(async() => {
+      const { data } = await axios.get('user')
+
+      name.value = data.first_name + ' ' + data.last_name
+    })
+
+    return {
+      name
+    }
+  }
 }
 </script>
