@@ -20,7 +20,7 @@
       </select>
     </div>
 
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+    <button class="btn btn-outline-secondary" type="submit">Save</button>
   </form>
 </template>
 
