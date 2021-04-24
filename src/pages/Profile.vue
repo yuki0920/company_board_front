@@ -33,8 +33,9 @@
 </template>
 
 <script lang="ts">
-import {onMounted, reactive} from 'vue';
+import {reactive, watch, computed} from 'vue';
 import axios from 'axios';
+import {useStore} from 'vuex'
 
 export default {
   name: "Profile",
@@ -50,16 +51,18 @@ export default {
       password_confirm: ''
     })
 
-    onMounted(async() => {
-      const {data} = await axios.get('user')
-
-      infoData.first_name = data.first_name
-      infoData.last_name = data.last_name
-      infoData.email = data.email
+    const store = useStore()
+    const user = computed(() => store.state.user)
+    watch(user, () => {
+      infoData.first_name = user.value.first_name
+      infoData.last_name = user.value.last_name
+      infoData.email = user.value.email
     })
 
     const infoSubmit = async () => {
-      await axios.put('users/info', infoData)
+      const {data} = await axios.put('users/info', infoData)
+
+      await store.dispatch('setUser', data)
     }
 
     const passwordSubmit = async () => {
