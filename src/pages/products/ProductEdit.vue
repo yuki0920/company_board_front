@@ -24,16 +24,17 @@
 </template>
 
 <script lang="ts">
-import {reactive} from 'vue'
+import {reactive, onMounted} from 'vue'
 import axios from 'axios'
-import {useRouter} from 'vue-router'
+import {useRouter, useRoute} from 'vue-router'
 import ImageUpload from '@/components/ImageUpload.vue'
 
 export default {
-  name: 'ProductCreate',
+  name: 'ProductEdit',
   components: {ImageUpload},
   setup () {
     const {push} = useRouter()
+    const {params} = useRoute()
     const formData = reactive({
       title: '',
       description: '',
@@ -41,10 +42,19 @@ export default {
       price: 0 // 空文字で初期化するとエラーになる
     })
 
+    onMounted(async () => {
+      const {data} = await axios.get(`products/${params.id}`)
+
+      formData.title = data.title
+      formData.description = data.description
+      formData.image = data.image
+      formData.price = data.price
+    })
+
     const submit = async () => {
       const data = {...formData, price: Number(formData.price)}
 
-      await axios.post('products', data)
+      await axios.put(`products/${params.id}`, data)
 
       await push('/products')
     }
