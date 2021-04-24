@@ -10,7 +10,10 @@
     </div>
     <div class="mb-3">
       <label>Image</label>
-      <input v-model="formData.image" class="form-control" name="image">
+      <div class="input-group">
+        <input v-model="formData.image" class="form-control" name="image">
+        <ImageUpload @uploaded="formData.image = $event" />
+      </div>
     </div>
     <div class="mb-3">
       <label>Price</label>
@@ -24,9 +27,11 @@
 import {reactive, ref} from 'vue'
 import axios from 'axios'
 import {useRouter} from 'vue-router'
+import ImageUpload from '@/components/ImageUpload.vue'
 
 export default {
   name: 'ProductCreate',
+  components: {ImageUpload},
   setup () {
     const {push} = useRouter()
     const formData = reactive({
@@ -37,8 +42,9 @@ export default {
     })
 
     const submit = async () => {
-      console.log('formData', formData)
-      await axios.post('products', formData)
+      const data = {...formData, price: Number(formData.price)}
+
+      await axios.post('products', data)
 
       await push('/products')
     }
