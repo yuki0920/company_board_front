@@ -52,7 +52,7 @@ export default {
     })
 
     const store = useStore()
-    const user = computed(() => store.state.user)
+    const user = computed(() => store.state.User.user)
     watch(user, () => {
       infoData.first_name = user.value.first_name
       infoData.last_name = user.value.last_name
@@ -62,7 +62,7 @@ export default {
     const infoSubmit = async () => {
       const {data} = await axios.put('users/info', infoData)
 
-      await store.dispatch('setUser', data)
+      await store.dispatch('User/setUser', data)
     }
 
     const passwordSubmit = async () => {

@@ -33,7 +33,7 @@ export default {
       try {
         const { data } = await axios.get('user')
 
-        store.dispatch('setUser', data)
+        store.dispatch('User/setUser', data)
       } catch (e) {
         await router.push('login')
       }
