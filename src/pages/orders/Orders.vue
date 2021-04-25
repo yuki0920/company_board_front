@@ -19,13 +19,15 @@
             <td>{{order.total}}</td>
             <td>
               <div class="btn-group mr-2">
-                <a href="javascript:void(0)" class="btn btn-sm btn-outline-secondary">View</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-outline-secondary"
+                  @click="select(order.id)"
+                >View</a>
               </div>
             </td>
           </tr>
           <tr>
             <td colspan="5">
-              <div>
+              <div class="overflow-hidden" :class="selectClass(order.id)">
                 <table class="table table-sm">
                   <thead>
                     <tr>
@@ -65,6 +67,7 @@ export default {
   setup() {
     const orders = ref([])
     const lastPage = ref('')
+    const selected = ref(0)
 
     const load = async(page = 1) => {
       const {data} = await axios.get(`orders?page=${page}`)
@@ -74,13 +77,30 @@ export default {
       lastPage.value = data.meta.last_page
     }
 
+    const select = (id: number) => selected.value = selected.value !== id ? id : 0
+    const selectClass = (id: number) => selected.value === id ? 'show' : 'hide'
+
     onMounted(load)
 
     return {
       orders,
       load,
+      select,
+      selectClass,
       lastPage
     }
   }
 }
 </script>
+
+<style scoped>
+.show {
+  max-height: 150px;
+  transition: max-height 1000ms ease-in;
+}
+
+.hide {
+  max-height: 0;
+  transition: max-height 1000ms ease-out;
+}
+</style>
