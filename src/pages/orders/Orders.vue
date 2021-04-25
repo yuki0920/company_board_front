@@ -1,4 +1,7 @@
 <template lang="html">
+  <div class="pt-3 pb-2 mb-3 border-bottom">
+    <a href="javascript:void(0)" class="btn btn-sm btn-outline-secondary" @click="exportCSV">Export</a>
+  </div>
   <div class="table-responsive">
     <table class="table table-striped table-sm">
       <thead>
@@ -80,6 +83,18 @@ export default {
     const select = (id: number) => selected.value = selected.value !== id ? id : 0
     const selectClass = (id: number) => selected.value === id ? 'show' : 'hide'
 
+    const exportCSV = async () => {
+      // data にはCSV形式の文字列が返る
+      const {data} = await axios.post('export', {}, {responseType: 'blob'})
+      const link = document.createElement('a')
+      // blobオブジェクトを表すURLURLを含むDOMStringを生成
+      // ex) `blob:http://localhost:8080/0061f976-751e-488a-a5fe-04ae38d1c5b9`
+      link.href = window.URL.createObjectURL(data)
+      link.download = 'orders.csv'
+      // ここまでのlinkオブジェクト ex) `<a href="blob:http://localhost:8080/15d94139-6bc9-42a7-a709-cfc8537c5361" download="orders.csv"></a>`
+      link.click()
+    }
+
     onMounted(load)
 
     return {
@@ -87,6 +102,7 @@ export default {
       load,
       select,
       selectClass,
+      exportCSV,
       lastPage
     }
   }
