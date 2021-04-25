@@ -37,11 +37,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in order.items" :key="item.id">
-                      <td>{{order.id}}</td>
-                      <td>{{order.product_title}}</td>
-                      <td>{{order.quantity}}</td>
-                      <td>{{order.price}}</td>
+                    <tr v-for="item in order.order_items" :key="item.id">
+                      <td>{{item.id}}</td>
+                      <td>{{item.product_title}}</td>
+                      <td>{{item.quantity}}</td>
+                      <td>{{item.price}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -69,7 +69,8 @@ export default {
     const load = async(page = 1) => {
       const {data} = await axios.get(`orders?page=${page}`)
 
-      orders.value = data
+      orders.value = data.data
+
       lastPage.value = data.meta.last_page
     }
 
@@ -77,7 +78,8 @@ export default {
 
     return {
       orders,
-      load
+      load,
+      lastPage
     }
   }
 }
